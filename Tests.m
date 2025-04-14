@@ -14,15 +14,16 @@ L=2222; % total line length (m)
 f=100e3;% Frequency of electrical parameters (Hz)
 w=2*pi*f;% parameter frequency (rad/s) 
 
-Test=6;% 1: diameter=50.8 mm ACSR - 1600 kV
+Test=8;% 1: diameter=50.8 mm ACSR - 1600 kV
         % 2: diameter=41.9 mm copper - 1600 kV
         % 3: diameter=23.54 mm ACSR - 1600 kV
         % 6: diameter=41.9 mm ACSR - 1300 kV
         % 7: diameter=50.8 mm ACSR - 1300 kV
         % 8: diameter=23.54 mm ACSR - 1300 kV
-Model=2;% 1: Equal capacitance at both ends of the line. Based on average line terminal voltage (VDLM)
+Model=3;% 1: Equal capacitance at both ends of the line. Based on average line terminal voltage (VDLM)
         % 2: Different capacitance at both ends of the line (AVDLM)
-
+        % 3: Line model without the corona effect
+        
 switch Test
     case {3,8}
         R_atp=3.092278e1; % resistance ohms/km     % Earth resistivity = 56ohm.m, f=100 kHz
@@ -91,6 +92,11 @@ switch Test
         % v_exp: voltage sampled at different distances on the line
 end
 
+if Model==3
+    V_crit=1e8;%It is guaranteed that the corona effect will never occur
+end
+
+
 if ~exist('R0','var')% If there is no R0 variable
     R0=R_atp/1000; % series resistance (Ohm/m)
     L0=X_atp/(1000*w); % series inductance (H/m)
@@ -112,25 +118,29 @@ for k=1:Ne
 end
 
 switch Model
-    case 1
+    case {1,3}
         [t_sim_dist,v_sim_dist] = exper_simul_comparison_ini(energ, distan_exp, delta_t, Tmax, R0, L0, C0, N, L, ZL, V_crit, K_C, K_G);
     case 2
         [t_sim_dist,v_sim_dist] = exper_simul_comparison_2(energ, distan_exp, delta_t, Tmax, R0, L0, C0, N, L, ZL, V_crit, K_C, K_G);
 end
 tm=tt+4.9e-6;%maximum time of available experimental data. 4.9e-6 is the maximum time span recorded for each voltage (see vector t_exp_)
 figure(1)
-plot(energ(1:end,1),energ(1:end,2),'k')% experimental data - energizing voltage
+plot(energ(1:end,1)*1e6,energ(1:end,2)*1e-3,'k')% experimental data - energizing voltage
 hold on
 for k=1:Ne
     t_temp=t_sim_dist(t_sim_dist<tm(k));%Simulated data are plotted over a time interval similar to the experimental data
     N_temp=length(t_temp);
-    plot(t_temp,v_sim_dist(k,1:N_temp),'r')%simulated data
-    plot(t_exp_(:,k),v_exp(:,k),'b')%experimental data
+    plot(t_temp*1e6,v_sim_dist(k,1:N_temp)*1e-3,'r')%simulated data
+    plot(t_exp_(:,k)*1e6,v_exp(:,k)*1e-3,'b')%experimental data
 end
-legend('Energizing voltage','Simulated data','Experimental data')
+if Model==3
+    legend('Energizing voltage','Computed (without corona)','Experimental data')
+else
+    legend('Energizing voltage','Simulated data','Experimental data')
+end
 grid on
-xlabel('Time [s]')
-ylabel('Voltage [V]')
+xlabel('Time [\mus]')
+ylabel('Voltage [kV]')
 
 error = error_calculation(t_sim_dist , v_sim_dist ,  t_exp_ , v_exp);
 X = ['Percentage error between simulated and experimental values: ',num2str(error*100),'%'];

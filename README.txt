@@ -1,13 +1,3 @@
-The transmission line models described in [1] are validated using high-voltage impulse test data presented in:
-
-[2] C. F. Wagner, I. W. Gross, and B. L. Lloyd, "High-Voltage Impulse Tests on Transmission Lines [includes discussion]," in Transactions of the American Institute of Electrical Engineers. Part III: Power Apparatus and Systems, vol. 73, no. 2, pp. 196-210, April 1954.
-
-The model in Section 2 of [1] is an improved version of the model presented in:
-
-[3] T. M. Pereira and M. C. Tavares, "Development of a Voltage-Dependent Line Model to Represent the Corona Effect in Electromagnetic Transient Program," in IEEE Transactions on Power Delivery, vol. 36, no. 2, pp. 731-739, April 2021.
-
------------------------------------------------------------------------------------------
-
 The main files and their functions are described below:
 
 Test.m: Simulates high-voltage impulse tests on transmission lines as described in [2], using the models presented in [1].

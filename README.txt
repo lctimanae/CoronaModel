@@ -1,7 +1,3 @@
-If the code is used for a scientific work, please reference the following publication:
-
-[1] Luis Carlos Timaná, Jaimis S. L. Colqui, Carlos Suárez, José Pissolato Filho. Implementation of a Voltage-Dependent Transmission Line Model with Corona Effect Consideration. Electric Power Systems Research (submitted article).
-
 The transmission line models described in [1] are validated using high-voltage impulse test data presented in:
 
 [2] C. F. Wagner, I. W. Gross, and B. L. Lloyd, "High-Voltage Impulse Tests on Transmission Lines [includes discussion]," in Transactions of the American Institute of Electrical Engineers. Part III: Power Apparatus and Systems, vol. 73, no. 2, pp. 196-210, April 1954.

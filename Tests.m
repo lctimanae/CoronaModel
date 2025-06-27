@@ -15,10 +15,10 @@ f=100e3;% Frequency of electrical parameters (Hz)
 w=2*pi*f;% parameter frequency (rad/s) 
 
 Test=8;% 1: diameter=50.8 mm ACSR - 1600 kV
-        % 2: diameter=41.9 mm copper - 1600 kV
+        % 2: diameter=41.9 mm copper - 1700 kV
         % 3: diameter=23.54 mm ACSR - 1600 kV
-        % 6: diameter=41.9 mm ACSR - 1300 kV
-        % 7: diameter=50.8 mm ACSR - 1300 kV
+        % 6: diameter=41.9 mm ACSR - 1400 kV
+        % 7: diameter=50.8 mm ACSR - 1200 kV
         % 8: diameter=23.54 mm ACSR - 1300 kV
 Model=3;% 1: Equal capacitance at both ends of the line. Based on average line terminal voltage (VDLM)
         % 2: Different capacitance at both ends of the line (AVDLM)
@@ -125,18 +125,20 @@ switch Model
 end
 tm=tt+4.9e-6;%maximum time of available experimental data. 4.9e-6 is the maximum time span recorded for each voltage (see vector t_exp_)
 figure(1)
-plot(energ(1:end,1)*1e6,energ(1:end,2)*1e-3,'k')% experimental data - energizing voltage
+plot(energ(1:end,1)*1e6,energ(1:end,2)*1e-3,'b')% experimental data - energizing voltage
 hold on
 for k=1:Ne
     t_temp=t_sim_dist(t_sim_dist<tm(k));%Simulated data are plotted over a time interval similar to the experimental data
     N_temp=length(t_temp);
-    plot(t_temp*1e6,v_sim_dist(k,1:N_temp)*1e-3,'r')%simulated data
+    plot(t_temp*1e6,v_sim_dist(k,1:N_temp)*1e-3,'Color','r','Marker','*','MarkerIndices',1:50:N_temp)%simulated data
     plot(t_exp_(:,k)*1e6,v_exp(:,k)*1e-3,'b')%experimental data
 end
 if Model==3
-    legend('Energizing voltage','Computed (without corona)','Experimental data')
+    %legend('Energizing voltage','Computed (without corona)','Experimental data')
+    legend('Measured','Bergeron (without corona)')
 else
-    legend('Energizing voltage','Simulated data','Experimental data')
+    %legend('Energizing voltage','Simulated data','Experimental data')
+    legend('Measured','Simulated data')
 end
 grid on
 xlabel('Time [\mus]')
